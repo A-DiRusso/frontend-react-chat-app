@@ -3,7 +3,7 @@ import './App.css';
 import axios from 'axios';
 import ChatList from './ChatList';
 import ChatForm from './ChatForm';
-
+import qs from 'qs';
 
 class App extends React.Component {
   constructor(props) {
@@ -38,13 +38,31 @@ class App extends React.Component {
       </div>
     );
   }
-  _setText = () => {
+  _setText = (text) => {
     console.log('App _setText');
+    this.setState({
+      text,
+    })
   }
-  _sendMessage = () => {
-    console.log('App: _sendMessage');
+  _sendMessage = async () => {
+    await axios({
+      method: 'post',
+      url: '/api',
+      data: qs.stringify({
+        message: this.state.text
+      }),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    this.setState({
+      text: ''
+    })
   }
 }
+    
+  
+
 
 
 export default App;
